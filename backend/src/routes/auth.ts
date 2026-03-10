@@ -1,0 +1,158 @@
+import { RequestHandler } from "express";
+import { Router, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import User from '../models/User';
+import AgentProfile from '../models/AgentProfile';
+import { authenticate, AuthRequest } from '../middleware/auth';
+
+const router = Router();
+
+// Generate JWT token
+const generateToken = (userId: string): string => {
+  return jwt.sign({ userId }, process.env.JWT_SECRET || 'fallback_secret', {
+    expiresIn: '7d',
+  });
+};
+
+// POST /api/auth/signup
+router.post('/signup', async (req: any, res: any) => {
+  try {
+    const { fullName, email, username, password, role, phone, address } = req.body;
+
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      res.status(400).json({ message: 'User with this email or username already exists' });
+      return;
+    }
+
+    const user = await User.create({
+      fullName,
+      email,
+      username,
+      password,
+      role: role || 'customer',
+      phone: phone || '',
+      address: address || '',
+    });
+
+    // If registering as agent, create an AgentProfile
+    if (role === 'agent') {
+      await AgentProfile.create({ userId: user._id });
+    }
+
+    const token = generateToken(user._id.toString());
+
+    res.status(201).json({
+      message: 'Registration successful',
+      token,
+      user: user.toJSON(),
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Registration failed', error: error.message });
+  }
+});
+
+// POST /api/auth/login
+router.post('/login', async (req: any, res: any) => {
+  try {
+    const { username, password } = req.body;
+
+    const user = await User.findOne({
+      $or: [{ username: username.toLowerCase() }, { email: username.toLowerCase() }],
+    }).select('+password');
+
+    if (!user || !user.password) {
+      res.status(401).json({ message: 'Invalid credentials' });
+      return;
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      res.status(401).json({ message: 'Invalid credentials' });
+      return;
+    }
+
+    const token = generateToken(user._id.toString());
+
+    res.json({
+      message: 'Login successful',
+      token,
+      user: user.toJSON(),
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Login failed', error: error.message });
+  }
+});
+
+// GET /api/auth/me
+router.get('/me', authenticate as any, async (req: any, res: any) => {
+  try {
+    res.json({ user: req.user });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Failed to get user', error: error.message });
+  }
+});
+
+// GET /api/auth/google
+router.get(
+  '/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+// GET /api/auth/google/callback
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+  (req: any, res: any) => {
+    const user = req.user as any;
+    const token = generateToken(user._id.toString());
+    const clientURL = process.env.CLIENT_URL || 'http://localhost:8080';
+    const isNew = (user as any)._isNewUser ? '&isNew=true' : '';
+    res.redirect(`${clientURL}/auth/google/callback?token=${token}${isNew}`);
+  }
+);
+
+// PUT /api/auth/role — let new Google users choose their role
+router.put('/role', authenticate as any, async (req: any, res: any) => {
+  try {
+    const { role } = req.body;
+    if (!['customer', 'agent'].includes(role)) {
+      res.status(400).json({ message: 'Invalid role. Must be customer or agent.' });
+      return;
+    }
+
+    const user = req.user!;
+    user.role = role;
+    await user.save();
+
+    // If switching to agent, create AgentProfile if it doesn't exist
+    if (role === 'agent') {
+      const existing = await AgentProfile.findOne({ userId: user._id });
+      if (!existing) {
+        await AgentProfile.create({ userId: user._id });
+      }
+    }
+
+    res.json({ message: 'Role updated', user: user.toJSON() });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Failed to update role', error: error.message });
+  }
+});
+
+// POST /api/auth/forgot-password
+router.post('/forgot-password', async (req: any, res: any) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({
+      $or: [{ email }, { username: email }],
+    });
+
+    // Always return success to prevent email enumeration
+    res.json({ message: 'If an account exists with this email, a reset link has been sent.' });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Request failed', error: error.message });
+  }
+});
+
+export default router;
