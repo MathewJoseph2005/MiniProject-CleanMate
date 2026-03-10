@@ -9,7 +9,6 @@ const sidebarItems = [
   { label: "Attendance", icon: <CalendarCheck className="h-4 w-4" />, path: "/agent/attendance" },
   { label: "Portfolio", icon: <Image className="h-4 w-4" />, path: "/agent/portfolio" },
   { label: "Documents", icon: <FileText className="h-4 w-4" />, path: "/agent/documents" },
-  { label: "Chat", icon: <MessageSquare className="h-4 w-4" />, path: "/agent/chat" },
   { label: "Update Status", icon: <RefreshCw className="h-4 w-4" />, path: "/agent/status" },
 ];
 

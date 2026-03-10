@@ -1,52 +1,153 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { User, UserRole } from "@/types";
+import { authAPI } from "@/lib/api";
 
 interface AuthContextType {
   user: User | null;
-  login: (username: string, password: string) => { success: boolean; message: string };
-  signup: (data: Omit<User, "id"> & { password: string }) => { success: boolean; message: string };
+  login: (username: string, password: string) => Promise<{ success: boolean; message: string }>;
+  signup: (data: { fullName: string; email: string; username: string; password: string; role: UserRole; phone: string; address: string }) => Promise<{ success: boolean; message: string }>;
   logout: () => void;
+  loginWithGoogle: () => void;
+  refreshUser: () => Promise<void>;
   isAuthenticated: boolean;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const mockUsers: (User & { password: string })[] = [
-  { id: "1", fullName: "John Customer", username: "customer", password: "password", role: "customer", phone: "555-0101", address: "123 Main St" },
-  { id: "2", fullName: "Sarah Agent", username: "agent", password: "password", role: "agent", phone: "555-0202", address: "456 Oak Ave" },
-  { id: "3", fullName: "Mike Admin", username: "admin", password: "password", role: "admin", phone: "555-0303", address: "789 Pine Rd" },
-];
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem("cleanmate_user");
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const login = (username: string, password: string) => {
-    const found = mockUsers.find((u) => u.username === username && u.password === password);
-    if (found) {
-      const { password: _, ...userData } = found;
-      setUser(userData);
-      localStorage.setItem("cleanmate_user", JSON.stringify(userData));
-      return { success: true, message: "Login Successful" };
+  // Restore session on mount
+  useEffect(() => {
+    const restoreSession = async () => {
+      const token = localStorage.getItem("cleanmate_token");
+      if (token) {
+        try {
+          const response = await authAPI.getMe();
+          const userData = response.data.user;
+          setUser({
+            id: userData._id,
+            fullName: userData.fullName,
+            email: userData.email,
+            username: userData.username,
+            role: userData.role,
+            phone: userData.phone,
+            address: userData.address,
+            avatar: userData.avatar,
+          });
+        } catch {
+          localStorage.removeItem("cleanmate_token");
+          localStorage.removeItem("cleanmate_user");
+        }
+      }
+      setLoading(false);
+    };
+    restoreSession();
+  }, []);
+
+  // Handle Google OAuth callback
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (token && window.location.pathname === "/auth/google/callback") {
+      localStorage.setItem("cleanmate_token", token);
+      authAPI.getMe().then((response) => {
+        const userData = response.data.user;
+        const user = {
+          id: userData._id,
+          fullName: userData.fullName,
+          email: userData.email,
+          username: userData.username,
+          role: userData.role,
+          phone: userData.phone,
+          address: userData.address,
+          avatar: userData.avatar,
+        };
+        setUser(user);
+        localStorage.setItem("cleanmate_user", JSON.stringify(user));
+        window.location.href = `/${userData.role}`;
+      });
     }
-    return { success: false, message: "Invalid credentials. Try customer/password, agent/password, or admin/password" };
+  }, []);
+
+  const login = async (username: string, password: string) => {
+    try {
+      const response = await authAPI.login(username, password);
+      const { token, user: userData } = response.data;
+
+      localStorage.setItem("cleanmate_token", token);
+      const user = {
+        id: userData._id,
+        fullName: userData.fullName,
+        email: userData.email,
+        username: userData.username,
+        role: userData.role,
+        phone: userData.phone,
+        address: userData.address,
+        avatar: userData.avatar,
+      };
+      setUser(user);
+      localStorage.setItem("cleanmate_user", JSON.stringify(user));
+      return { success: true, message: "Login Successful" };
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Login failed. Please try again.";
+      return { success: false, message };
+    }
   };
 
-  const signup = (data: Omit<User, "id"> & { password: string }) => {
-    const exists = mockUsers.find((u) => u.username === data.username);
-    if (exists) return { success: false, message: "Username already exists" };
-    return { success: true, message: "Registration Successful" };
+  const signup = async (data: { fullName: string; email: string; username: string; password: string; role: UserRole; phone: string; address: string }) => {
+    try {
+      await authAPI.signup(data);
+      return { success: true, message: "Registration Successful" };
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Registration failed. Please try again.";
+      return { success: false, message };
+    }
+  };
+
+  const loginWithGoogle = () => {
+    window.location.href = authAPI.googleLoginUrl();
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("cleanmate_user");
+    localStorage.removeItem("cleanmate_token");
   };
 
+  const refreshUser = async () => {
+    try {
+      const response = await authAPI.getMe();
+      const userData = response.data.user;
+      const newUser = {
+        id: userData._id,
+        fullName: userData.fullName,
+        email: userData.email,
+        username: userData.username,
+        role: userData.role,
+        phone: userData.phone,
+        address: userData.address,
+        avatar: userData.avatar,
+      };
+      setUser(newUser);
+      localStorage.setItem("cleanmate_user", JSON.stringify(newUser));
+    } catch {
+      logout();
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, loginWithGoogle, refreshUser, isAuthenticated: !!user, loading }}>
       {children}
     </AuthContext.Provider>
   );

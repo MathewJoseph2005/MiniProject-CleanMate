@@ -8,33 +8,38 @@ interface StatCardProps {
   variant?: "default" | "primary" | "accent" | "success" | "warning";
 }
 
-const variantStyles = {
-  default: "border-border/60",
-  primary: "border-l-4 border-l-primary border-border/60",
-  accent: "border-l-4 border-l-accent border-border/60",
-  success: "border-l-4 border-l-success border-border/60",
-  warning: "border-l-4 border-l-warning border-border/60",
+const bgGradients = {
+  default: "from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-800/80 text-slate-500",
+  primary: "from-blue-500 to-cyan-400 text-white",
+  accent: "from-purple-500 to-pink-500 text-white",
+  success: "from-emerald-500 to-teal-400 text-white",
+  warning: "from-orange-500 to-amber-400 text-white",
 };
 
-const iconVariants = {
-  default: "bg-muted text-muted-foreground",
-  primary: "bg-primary/10 text-primary",
-  accent: "bg-accent/20 text-accent-foreground",
-  success: "bg-success/10 text-success",
-  warning: "bg-warning/10 text-warning",
+const topBorders = {
+  default: "border-slate-200 dark:border-slate-700",
+  primary: "border-blue-500 dark:border-cyan-400",
+  accent: "border-purple-500 dark:border-pink-500",
+  success: "border-emerald-500 dark:border-teal-400",
+  warning: "border-orange-500 dark:border-amber-400",
 };
 
 export function StatCard({ title, value, icon: Icon, trend, variant = "default" }: StatCardProps) {
   return (
-    <div className={`stat-card ${variantStyles[variant]}`}>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          <p className="text-2xl font-display font-bold mt-1">{value}</p>
-          {trend && <p className="text-xs text-success mt-1">{trend}</p>}
-        </div>
-        <div className={`p-3 rounded-lg ${iconVariants[variant]}`}>
-          <Icon className="h-5 w-5" />
+    <div className={`bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] dark:shadow-none overflow-hidden relative group transition-all duration-300 hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)] hover:-translate-y-1`}>
+      {/* Top Accent Line */}
+      <div className={`absolute top-0 left-0 right-0 border-t-4 ${topBorders[variant]} opacity-70 group-hover:opacity-100 transition-opacity`}></div>
+      
+      <div className="p-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">{title}</p>
+            <h3 className="text-3xl font-display font-bold text-slate-900 dark:text-white tracking-tight">{value}</h3>
+            {trend && <p className="text-sm font-medium text-emerald-500 mt-2 flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> {trend}</p>}
+          </div>
+          <div className={`h-14 w-14 rounded-2xl flex items-center justify-center bg-gradient-to-br ${bgGradients[variant]} shadow-lg shadow-${variant}/20 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+             <Icon className="h-6 w-6 relative z-10" />
+          </div>
         </div>
       </div>
     </div>

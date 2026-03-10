@@ -5,14 +5,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import logo from "@/assets/logo.svg";
+import { authAPI } from "@/lib/api";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setIsLoading(true);
+    try {
+      await authAPI.forgotPassword(email);
+      setSent(true);
+    } catch {
+      setSent(true); // Show success anyway to prevent email enumeration
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -58,8 +68,8 @@ export default function ForgotPassword() {
                 />
               </div>
 
-              <Button type="submit" className="w-full">
-                Send Reset Link
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "Sending..." : "Send Reset Link"}
               </Button>
 
               <Link

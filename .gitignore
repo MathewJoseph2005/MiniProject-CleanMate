@@ -3,6 +3,7 @@
 # ----------------------------
 node_modules/
 */node_modules/
+.npm/
 
 # ----------------------------
 # Logs
@@ -21,6 +22,7 @@ dist/
 build/
 frontend/dist/
 backend/dist/
+dist-tsc/
 
 # ----------------------------
 # Environment Variables
@@ -34,6 +36,7 @@ backend/dist/
 # ----------------------------
 .DS_Store
 Thumbs.db
+*.pem
 
 # ----------------------------
 # IDE / Editor
@@ -42,6 +45,18 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# ----------------------------
+# Formatting / Linting
+# ----------------------------
+.eslintcache
+.stylelintcache
+.prettiercache
+
+# ----------------------------
+# Typescript
+# ----------------------------
+*.tsbuildinfo
 
 # ----------------------------
 # Lock Files (Optional – keep if team project)
@@ -54,6 +69,13 @@ Thumbs.db
 # Coverage
 # ----------------------------
 coverage/
+.nyc_output/
+
+# ----------------------------
+# Uploads / Assets
+# ----------------------------
+backend/uploads/
+uploads/
 
 # ----------------------------
 # Temporary Files

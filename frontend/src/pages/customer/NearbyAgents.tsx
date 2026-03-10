@@ -1,11 +1,28 @@
-import { mockAgents } from "@/data/mockData";
-import { Star, MapPin } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Star } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { customerAPI } from "@/lib/api";
+import { Agent } from "@/types";
 
 export default function NearbyAgents() {
   const [sort, setSort] = useState("rating");
-  const sorted = [...mockAgents].sort((a, b) => sort === "rating" ? b.rating - a.rating : b.completedJobs - a.completedJobs);
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    customerAPI.getNearbyAgents()
+      .then((res) => setAgents(res.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const sorted = [...agents].sort((a, b) => sort === "rating" ? b.rating - a.rating : b.completedJobs - a.completedJobs);
+
+  if (loading) {
+    return <div className="page-container animate-fade-in flex items-center justify-center py-20">
+      <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+    </div>;
+  }
 
   return (
     <div className="page-container animate-fade-in">
@@ -19,6 +36,8 @@ export default function NearbyAgents() {
           </SelectContent>
         </Select>
       </div>
+
+      {sorted.length === 0 && <p className="text-muted-foreground text-sm">No agents available at the moment.</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {sorted.map((agent) => (

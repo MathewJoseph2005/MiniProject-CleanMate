@@ -9,13 +9,15 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import RoleSelection from "./pages/auth/RoleSelection";
+import Home from "./pages/Home";
+import { FloatingChatWidget } from "./components/FloatingChatWidget";
 
 import CustomerLayout from "./pages/customer/CustomerLayout";
 import CustomerDashboard from "./pages/customer/CustomerDashboard";
 import BookService from "./pages/customer/BookService";
 import CostEstimator from "./pages/customer/CostEstimator";
 import NearbyAgents from "./pages/customer/NearbyAgents";
-import ChatPage from "./pages/customer/ChatPage";
 import ServiceTracking from "./pages/customer/ServiceTracking";
 import ServiceHistory from "./pages/customer/ServiceHistory";
 import Reviews from "./pages/customer/Reviews";
@@ -41,11 +43,13 @@ const App = () => (
       <Sonner />
       <AuthProvider>
         <BrowserRouter>
+          <FloatingChatWidget />
           <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/auth/google/callback" element={<RoleSelection />} />
 
             {/* Customer Routes */}
             <Route path="/customer" element={<ProtectedRoute allowedRoles={["customer"]}><CustomerLayout /></ProtectedRoute>}>
@@ -53,7 +57,6 @@ const App = () => (
               <Route path="book" element={<BookService />} />
               <Route path="estimator" element={<CostEstimator />} />
               <Route path="agents" element={<NearbyAgents />} />
-              <Route path="chat" element={<ChatPage />} />
               <Route path="tracking" element={<ServiceTracking />} />
               <Route path="history" element={<ServiceHistory />} />
               <Route path="reviews" element={<Reviews />} />
@@ -68,7 +71,6 @@ const App = () => (
               <Route path="attendance" element={<AgentAttendance />} />
               <Route path="portfolio" element={<AgentPortfolio />} />
               <Route path="documents" element={<AgentDocuments />} />
-              <Route path="chat" element={<ChatPage />} />
               <Route path="status" element={<AgentUpdateStatus />} />
             </Route>
 

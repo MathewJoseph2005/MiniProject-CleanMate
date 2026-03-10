@@ -8,7 +8,6 @@ const sidebarItems = [
   { label: "Book Service", icon: <Calendar className="h-4 w-4" />, path: "/customer/book" },
   { label: "Cost Estimator", icon: <Calculator className="h-4 w-4" />, path: "/customer/estimator" },
   { label: "Nearby Agents", icon: <MapPin className="h-4 w-4" />, path: "/customer/agents" },
-  { label: "Chat", icon: <MessageSquare className="h-4 w-4" />, path: "/customer/chat" },
   { label: "Service Tracking", icon: <Navigation className="h-4 w-4" />, path: "/customer/tracking" },
   { label: "Service History", icon: <History className="h-4 w-4" />, path: "/customer/history" },
   { label: "Reviews", icon: <Star className="h-4 w-4" />, path: "/customer/reviews" },
