@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
-import { CheckCircle, Circle, Clock, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { CheckCircle, Circle, Clock, Loader2, MessageSquare } from "lucide-react";
 import { customerAPI } from "@/lib/api";
+import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TrackingStep } from "@/types";
 
 export default function ServiceTracking() {
+  const navigate = useNavigate();
   const [bookings, setBookings] = useState<any[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<string>("");
   const [tracking, setTracking] = useState<{ booking: any; steps: TrackingStep[] } | null>(null);
@@ -100,9 +103,20 @@ export default function ServiceTracking() {
                 </div>
               </div>
 
-              <div className="mt-8 p-4 rounded-lg bg-muted/50">
-                <p className="text-sm font-medium">Agent: {booking.agentId?.fullName || "Pending assignment"}</p>
-                <p className="text-xs text-muted-foreground mt-1">Amount: ₹{booking.amount?.toLocaleString("en-IN")}</p>
+              <div className="mt-8 p-4 rounded-lg bg-muted/50 flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <p className="text-sm font-medium">Agent: {booking.agentId?.fullName || "Pending assignment"}</p>
+                    <p className="text-xs text-muted-foreground mt-1">Amount: ₹{booking.amount?.toLocaleString("en-IN")}</p>
+                </div>
+                {booking.agentId && (
+                    <Button 
+                        size="sm" 
+                        className="gap-2"
+                        onClick={() => navigate(`/customer/messages/${booking._id}`)}
+                    >
+                        <MessageSquare className="h-4 w-4" /> Chat with Agent
+                    </Button>
+                )}
               </div>
             </div>
           )}

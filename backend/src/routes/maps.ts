@@ -52,6 +52,33 @@ router.post('/geocode', async (req: any, res: any) => {
   }
 });
 
+// GET /api/maps/reverse-geocode
+router.get('/reverse-geocode', async (req: any, res: any) => {
+  try {
+    const { lat, lng } = req.query;
+    const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+
+    if (!apiKey || apiKey === 'your_google_maps_api_key') {
+      res.json({ formatted_address: 'Bangalore, Karnataka, India (Mock)' });
+      return;
+    }
+
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`
+    );
+
+    if (response.data.results.length === 0) {
+      res.status(404).json({ message: 'Location not found' });
+      return;
+    }
+
+    const formatted_address = response.data.results[0].formatted_address;
+    res.json({ formatted_address });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Reverse geocoding failed', error: error.message });
+  }
+});
+
 // GET /api/maps/nearby-agents
 router.get('/nearby-agents', async (req: any, res: any) => {
   try {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { io, Socket } from 'socket.io-client';
-import { X, MessageSquare, Send, Paperclip, Smile, Loader2, Minimize2, Bot } from 'lucide-react';
+import { X, MessageSquare, Send, Paperclip, Smile, Loader2, Minimize2, Bot, Check, CheckCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -10,8 +10,10 @@ interface Message {
   _id: string;
   text: string;
   isAiMessage: boolean;
+  status: 'sent' | 'read';
   createdAt: string;
   senderId?: {
+    _id: string;
     fullName: string;
     avatar?: string;
   };
@@ -27,12 +29,12 @@ export function FloatingChatWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('cleanmate_token');
   const userId = user?.id || (user as any)?._id;
-  const roomId = userId ? `ai_${userId}` : '';
+  const aiRoomId = userId ? `ai_${userId}` : '';
 
   useEffect(() => {
-    if (!isOpen || !user || !token) return;
+    if (!isOpen || !user || !token || !aiRoomId) return;
 
     const newSocket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000', {
       auth: { token },
@@ -40,7 +42,8 @@ export function FloatingChatWidget() {
     });
 
     newSocket.on('connect', () => {
-      newSocket.emit('join_room', roomId);
+      console.log(`🔌 AI Socket connected! Joining room: ${aiRoomId}`);
+      newSocket.emit('join_room', aiRoomId);
     });
 
     newSocket.on('chat_history', (history: Message[]) => {
@@ -59,7 +62,7 @@ export function FloatingChatWidget() {
     return () => {
       newSocket.disconnect();
     };
-  }, [isOpen, user, token, roomId]);
+  }, [isOpen, user, token, aiRoomId]);
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -74,7 +77,7 @@ export function FloatingChatWidget() {
     if (!inputValue.trim() || !socket) return;
 
     socket.emit('send_message', {
-      roomId,
+      roomId: aiRoomId,
       text: inputValue,
     });
 
@@ -131,10 +134,14 @@ export function FloatingChatWidget() {
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-90">
                 <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mb-2 backdrop-blur-md border border-white/20 shadow-xl">
-                  <MessageSquare className="h-10 w-10 text-white" />
+                  <Bot className="h-10 w-10 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-white tracking-wide">Welcome!</h3>
-                <p className="text-sm text-blue-100 font-medium px-6 leading-relaxed">I am your CleanMate Assistant. How can I help you today?</p>
+                <h3 className="text-xl font-bold text-white tracking-wide">
+                  Welcome!
+                </h3>
+                <p className="text-sm text-blue-100 font-medium px-6 leading-relaxed">
+                  I am your CleanMate Assistant. How can I help you today?
+                </p>
               </div>
             ) : (
               <div className="space-y-6">
@@ -144,7 +151,7 @@ export function FloatingChatWidget() {
                 </div>
                 
                 {messages.map((msg, i) => {
-                  const isMe = !msg.isAiMessage;
+                  const isMe = msg.senderId?._id === userId || (!msg.isAiMessage && !msg.senderId);
                   return (
                     <div key={msg._id || i} className={`flex ${isMe ? 'justify-end' : 'justify-start'} group animate-in slide-in-from-bottom-2`}>
                       <div className={`max-w-[85%] rounded-[22px] px-5 py-3.5 text-sm shadow-md relative leading-relaxed tracking-wide font-medium ${
@@ -153,14 +160,32 @@ export function FloatingChatWidget() {
                           : 'bg-white text-slate-800 rounded-bl-sm border border-black/5 hover:shadow-lg transition-shadow'
                       }`}>
                         <p className="whitespace-pre-wrap">{msg.text}</p>
-                        <span className={`text-[10px] font-bold absolute -bottom-5 opacity-70 whitespace-nowrap ${isMe ? 'right-2 text-white/70' : 'left-2 text-white/80'}`}>
+                        <span className={`text-[10px] font-bold absolute -bottom-5 opacity-70 whitespace-nowrap flex items-center gap-1 ${isMe ? 'right-2 text-white/70' : 'left-2 text-white/80'}`}>
                           {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          {isMe && (
+                            <span>
+                              {msg.status === 'read' ? (
+                                <CheckCheck className="h-3 w-3 text-blue-300" />
+                              ) : (
+                                <Check className="h-3 w-3 text-white/60" />
+                              )}
+                            </span>
+                          )}
                         </span>
                       </div>
                     </div>
                   );
                 })}
               </div>
+            )}
+            {isTyping && (
+                <div className="flex justify-start mt-4 animate-in fade-in">
+                    <div className="bg-white/20 backdrop-blur-md rounded-full px-4 py-2 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce"></span>
+                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                    </div>
+                </div>
             )}
           </div>
 

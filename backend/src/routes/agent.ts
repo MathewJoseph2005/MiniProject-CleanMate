@@ -67,6 +67,7 @@ router.get('/requests', async (req: any, res: any) => {
         status: r.status,
         address: r.address || customer?.address || '',
         amount: r.amount,
+        customerId: customer?._id || customer?.id,
       };
     });
 

@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle, Zap } from "lucide-react";
+import { CheckCircle, Zap, MapPin, Loader2 } from "lucide-react";
 import { customerAPI } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -18,6 +18,41 @@ export default function BookService() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
+
+  const [isFetchingLocation, setIsFetchingLocation] = useState(false);
+
+  const fetchLocation = () => {
+    if (!navigator.geolocation) {
+      toast({ title: "Error", description: "Geolocation is not supported by your browser", variant: "destructive" });
+      return;
+    }
+
+    setIsFetchingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude: lat, longitude: lng } = position.coords;
+          const res = await customerAPI.reverseGeocode(lat, lng);
+          setAddress(res.data.formatted_address);
+          toast({ title: "📍 Location Updated", description: "Your current address has been fetched." });
+        } catch (error: any) {
+          console.error("Reverse geocoding error:", error);
+          const message = error.response?.data?.message || error.message || "Unknown error";
+          toast({ 
+            title: "Geolocation Error", 
+            description: `${message}. Please enter your address manually if this persists.`, 
+            variant: "destructive" 
+          });
+        } finally {
+          setIsFetchingLocation(false);
+        }
+      },
+      (error) => {
+        setIsFetchingLocation(false);
+        toast({ title: "Error", description: "Please enable location permissions", variant: "destructive" });
+      }
+    );
+  };
 
   const handleBook = async () => {
     if (!category || !variant) {
@@ -86,7 +121,19 @@ export default function BookService() {
           </div>
 
           <div className="space-y-2">
-            <Label>Service Address (optional, defaults to your registered address)</Label>
+            <div className="flex items-center justify-between">
+                <Label>Service Address (optional, defaults to your registered address)</Label>
+                <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-8 text-xs gap-1.5 text-primary hover:text-primary hover:bg-primary/10"
+                    onClick={fetchLocation}
+                    disabled={isFetchingLocation}
+                >
+                    {isFetchingLocation ? <Loader2 className="h-3 w-3 animate-spin" /> : <MapPin className="h-3 w-3" />}
+                    Use Current Location
+                </Button>
+            </div>
             <Input placeholder="Enter service address" value={address} onChange={(e) => setAddress(e.target.value)} />
           </div>
 

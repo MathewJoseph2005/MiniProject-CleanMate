@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Check, X } from "lucide-react";
+import { Check, X, MessageSquare, MapPin } from "lucide-react";
 import { agentAPI } from "@/lib/api";
 import { ServiceRequest } from "@/types";
 
 export default function AgentRequests() {
+  const navigate = useNavigate();
   const [requests, setRequests] = useState<ServiceRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -60,6 +62,29 @@ export default function AgentRequests() {
                 )}
               </div>
             </div>
+            {r.status === "approved" && (
+                <div className="mt-4 flex flex-wrap gap-2 border-t pt-4">
+                    <Button 
+                        size="sm" 
+                        variant="secondary" 
+                        className="gap-2"
+                        onClick={() => navigate(`/agent/messages/${r.id || r._id}`)}
+                    >
+                        <MessageSquare className="h-4 w-4" /> Chat with Customer
+                    </Button>
+                    <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="gap-2"
+                        onClick={() => {
+                            const query = encodeURIComponent(r.address);
+                            window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+                        }}
+                    >
+                        <MapPin className="h-4 w-4" /> View on Map
+                    </Button>
+                </div>
+            )}
           </div>
         ))}
       </div>

@@ -10,6 +10,7 @@ const sidebarItems = [
   { label: "Nearby Agents", icon: <MapPin className="h-4 w-4" />, path: "/customer/agents" },
   { label: "Service Tracking", icon: <Navigation className="h-4 w-4" />, path: "/customer/tracking" },
   { label: "Service History", icon: <History className="h-4 w-4" />, path: "/customer/history" },
+  { label: "Messages", icon: <MessageSquare className="h-4 w-4" />, path: "/customer/messages" },
   { label: "Reviews", icon: <Star className="h-4 w-4" />, path: "/customer/reviews" },
   { label: "Complaints", icon: <AlertTriangle className="h-4 w-4" />, path: "/customer/complaints" },
 ];

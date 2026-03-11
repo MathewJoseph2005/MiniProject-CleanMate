@@ -90,6 +90,15 @@ export const setupChatHandlers = (io: Server): void => {
       socket.join(roomId);
       console.log(`📝 ${user.fullName} joined room: ${roomId}`);
 
+      // Mark messages as read where user is not the sender
+      await ChatMessage.updateMany(
+        { roomId, senderId: { $ne: user._id }, status: 'sent' },
+        { $set: { status: 'read' } }
+      );
+
+      // Notify others in the room that messages have been read
+      io.to(roomId).emit('messages_read', { roomId, userId: user._id });
+
       // Send chat history
       const history = await ChatMessage.find({ roomId })
         .sort({ createdAt: 1 })
@@ -102,23 +111,32 @@ export const setupChatHandlers = (io: Server): void => {
     // Send a message
     socket.on('send_message', async (data: { roomId: string; text: string; receiverId?: string }) => {
       try {
+        // Check if there are other users in the room
+        const roomSockets = await io.in(data.roomId).fetchSockets();
+        const otherUsersInRoom = roomSockets.some(s => (s as any).user?._id.toString() !== user._id.toString());
+        
+        const status = otherUsersInRoom ? 'read' : 'sent';
+
         const message = await ChatMessage.create({
           senderId: user._id,
           receiverId: data.receiverId,
           roomId: data.roomId,
           text: data.text,
           isAiMessage: false,
+          status: status,
         });
 
         const populated = await message.populate('senderId', 'fullName avatar');
 
-        // Broadcast to the room
+        // Broadcast to the room (to EVERYONE including the sender)
+        console.log(`✉️ Broadcasting message to room: ${data.roomId} with status: ${status}`);
         io.to(data.roomId).emit('new_message', {
           _id: populated._id,
           senderId: populated.senderId,
           text: populated.text,
           roomId: populated.roomId,
           isAiMessage: false,
+          status: populated.status,
           createdAt: populated.createdAt,
         });
 
@@ -132,6 +150,7 @@ export const setupChatHandlers = (io: Server): void => {
               roomId: data.roomId,
               text: aiResponse,
               isAiMessage: true,
+              status: 'read',
             });
 
             io.to(data.roomId).emit('new_message', {
@@ -140,6 +159,7 @@ export const setupChatHandlers = (io: Server): void => {
               text: aiMessage.text,
               roomId: aiMessage.roomId,
               isAiMessage: true,
+              status: 'read',
               createdAt: aiMessage.createdAt,
             });
           }, 1000);

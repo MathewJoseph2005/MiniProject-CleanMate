@@ -12,6 +12,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import RoleSelection from "./pages/auth/RoleSelection";
 import Home from "./pages/Home";
 import { FloatingChatWidget } from "./components/FloatingChatWidget";
+import Messages from "./pages/shared/Messages";
 
 import CustomerLayout from "./pages/customer/CustomerLayout";
 import CustomerDashboard from "./pages/customer/CustomerDashboard";
@@ -59,6 +60,8 @@ const App = () => (
               <Route path="agents" element={<NearbyAgents />} />
               <Route path="tracking" element={<ServiceTracking />} />
               <Route path="history" element={<ServiceHistory />} />
+              <Route path="messages" element={<Messages />} />
+              <Route path="messages/:bookingId" element={<Messages />} />
               <Route path="reviews" element={<Reviews />} />
               <Route path="complaints" element={<Complaints />} />
             </Route>
@@ -71,6 +74,8 @@ const App = () => (
               <Route path="attendance" element={<AgentAttendance />} />
               <Route path="portfolio" element={<AgentPortfolio />} />
               <Route path="documents" element={<AgentDocuments />} />
+              <Route path="messages" element={<Messages />} />
+              <Route path="messages/:bookingId" element={<Messages />} />
               <Route path="status" element={<AgentUpdateStatus />} />
             </Route>
 

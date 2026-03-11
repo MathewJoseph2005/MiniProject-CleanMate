@@ -78,6 +78,8 @@ export const customerAPI = {
     api.post('/customer/complaints', data),
   getEstimate: (area: number, serviceType?: string, variant?: string) =>
     api.get('/customer/estimate', { params: { area, serviceType, variant } }),
+  reverseGeocode: (lat: number, lng: number) =>
+    api.get('/maps/reverse-geocode', { params: { lat, lng } }),
 };
 
 // ─── Agent API ──────────────────────────────────────────────────────────────

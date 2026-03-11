@@ -6,6 +6,7 @@ export interface IChatMessage extends Document {
   roomId: string;
   text: string;
   isAiMessage: boolean;
+  status: 'sent' | 'read';
   createdAt: Date;
 }
 
@@ -16,6 +17,7 @@ const chatMessageSchema = new Schema<IChatMessage>(
     roomId: { type: String, required: true, index: true },
     text: { type: String, required: true },
     isAiMessage: { type: Boolean, default: false },
+    status: { type: String, enum: ['sent', 'read'], default: 'sent' },
   },
   { timestamps: true }
 );
