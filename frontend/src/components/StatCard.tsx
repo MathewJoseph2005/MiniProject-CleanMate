@@ -9,19 +9,19 @@ interface StatCardProps {
 }
 
 const bgGradients = {
-  default: "from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-800/80 text-slate-500",
-  primary: "from-blue-500 to-cyan-400 text-white",
-  accent: "from-purple-500 to-pink-500 text-white",
-  success: "from-emerald-500 to-teal-400 text-white",
-  warning: "from-orange-500 to-amber-400 text-white",
+  default: "from-white to-slate-50 text-[#1a2e1a]",
+  primary: "from-[#1a2e1a] to-[#2C5F2D] text-white",
+  accent: "from-[#97BC62] to-[#88ac54] text-[#1a2e1a]",
+  success: "from-emerald-600 to-teal-500 text-white",
+  warning: "from-amber-500 to-orange-400 text-white",
 };
 
 const topBorders = {
-  default: "border-slate-200 dark:border-slate-700",
-  primary: "border-blue-500 dark:border-cyan-400",
-  accent: "border-purple-500 dark:border-pink-500",
-  success: "border-emerald-500 dark:border-teal-400",
-  warning: "border-orange-500 dark:border-amber-400",
+  default: "border-slate-100",
+  primary: "border-[#1a2e1a]",
+  accent: "border-[#97BC62]",
+  success: "border-emerald-500",
+  warning: "border-amber-400",
 };
 
 export function StatCard({ title, value, icon: Icon, trend, variant = "default" }: StatCardProps) {

@@ -1,36 +1,79 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Play, Sparkles, Shield, Clock, Droplets, ArrowRight, UserCheck, CheckCircle2 } from "lucide-react";
+import { 
+  Sparkles, Shield, Clock, Droplets, ArrowRight, 
+  Phone, Mail, Star, CheckCircle2, Leaf, 
+  Wind, Building2, UserCheck, MessageSquare,
+  Smartphone, Award
+} from "lucide-react";
 import logo from "@/assets/logo.svg";
 
 const SERVICES = [
-  { icon: Droplets, title: "Standard Cleaning", desc: "Regular house cleaning for a fresh and tidy home.", color: "text-blue-500", bg: "bg-blue-500/10" },
-  { icon: Sparkles, title: "Deep Cleaning", desc: "Thorough cleaning reaching every nook and cranny.", color: "text-purple-500", bg: "bg-purple-500/10" },
-  { icon: Clock, title: "Emergency Cleaning", desc: "Immediate response for urgent cleaning needs.", color: "text-orange-500", bg: "bg-orange-500/10" },
-  { icon: Shield, title: "Sanitization", desc: "Professional disinfection for a safe environment.", color: "text-green-500", bg: "bg-green-500/10" },
+  { 
+    icon: Wind, 
+    title: "Deep Cleaning", 
+    desc: "A thorough, detailed cleaning that reaches every hidden corner of your home, ensuring a pristine living space.",
+    bg: "bg-brand-soft"
+  },
+  { 
+    icon: Building2, 
+    title: "Commercial Cleaning", 
+    desc: "Maintain a professional and healthy workspace for your employees with our tailored office cleaning solutions.",
+    bg: "bg-brand-soft"
+  },
+  { 
+    icon: Leaf, 
+    title: "Eco Sanitization", 
+    desc: "Using only eco-friendly, non-toxic products to disinfect your environment safely for families and pets.",
+    bg: "bg-brand-soft"
+  },
+  { 
+    icon: Droplets, 
+    title: "Window Cleaning", 
+    desc: "Streak-free, crystal clear windows that invite natural light and enhance the beauty of your property.",
+    bg: "bg-brand-soft"
+  }
 ];
 
-const EXPERTS = [
-  { name: "Robert Fox", role: "Sr. Cleaner", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Robert" },
-  { name: "Wade Warren", role: "Deep Clean Expert", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Wade" },
-  { name: "Guy Hawkins", role: "Sanitization Pro", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Guy" },
-  { name: "Devon Lane", role: "Home Cleaner", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Devon" },
+const EQUIPMENT = [
+  { name: "Eco-HEPA Vacuum", image: "/images/vacuum_new.png" },
+  { name: "Fiber Cloths", image: "https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?q=80&w=400&auto=format&fit=crop" },
+  { name: "Steam Purifiers", image: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=400&auto=format&fit=crop" },
 ];
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-white font-sans text-brand-dark overflow-x-hidden">
+      {/* Top Contact Bar */}
+      <div className="bg-brand-dark text-white py-2 px-6 hidden md:block">
+        <div className="max-w-7xl mx-auto flex justify-between items-center text-[13px] font-medium opacity-90">
+          <div className="flex items-center gap-6">
+            <span className="flex items-center gap-2">
+              <Phone className="h-3.5 w-3.5 text-brand-light" /> +91 123 456 7890
+            </span>
+            <span className="flex items-center gap-2">
+              <Mail className="h-3.5 w-3.5 text-brand-light" /> hello@cleanmate.com
+            </span>
+          </div>
+          <div className="flex items-center gap-4 italic text-brand-light">
+            <Leaf className="h-3 w-3" /> Eco-Friendly Choice for Your Home
+          </div>
+        </div>
+      </div>
+
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-b border-border/40 transition-all duration-300">
+      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="CleanMate" className="h-8 w-8" />
-            <span className="text-2xl font-display font-bold text-primary">CleanMate</span>
+            <div className="h-10 w-10 bg-brand-dark rounded-xl flex items-center justify-center">
+              <Sparkles className="h-6 w-6 text-brand-light" />
+            </div>
+            <span className="text-2xl font-display font-extrabold tracking-tight text-brand-dark italic">CleanMate</span>
           </div>
 
-          <div className="hidden md:flex flex-1 justify-center gap-8">
-            {['Home', 'About', 'Services', 'Features', 'Contact'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
+          <div className="hidden lg:flex flex-1 justify-center gap-10">
+            {['Home', 'Services', 'Quality', 'Our Team', 'Contact'].map((item) => (
+              <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="text-[15px] font-semibold text-brand-dark/80 hover:text-brand-dark hover:underline decoration-brand-light decoration-2 underline-offset-8 transition-all">
                 {item}
               </a>
             ))}
@@ -38,178 +81,293 @@ export default function Home() {
 
           <div className="flex items-center gap-4">
             <Link to="/login">
-              <span className="text-sm font-medium text-foreground hover:text-primary transition-colors cursor-pointer hidden sm:block">Log in</span>
+              <Button variant="ghost" className="text-brand-dark hover:text-brand-dark/70 font-bold hidden sm:block">Log in</Button>
             </Link>
-            <Link to="/signup">
-              <Button className="rounded-full px-6 font-semibold shadow-md hover:shadow-lg transition-all">Sign Up</Button>
+            <Link to="/signup?role=customer">
+              <Button className="green-gradient text-white hover:opacity-90 rounded-full px-8 h-12 font-bold shadow-lg shadow-brand-dark/10">
+                Book Now
+              </Button>
             </Link>
           </div>
         </div>
       </nav>
 
-      <main className="pt-28">
-        {/* HERO SECTION - Matching Figure 1 & 3 */}
-        <section className="relative max-w-7xl mx-auto px-6 pt-12 pb-24 lg:pt-20 lg:pb-32 flex flex-col lg:flex-row items-center gap-12 lg:gap-20 min-h-[85vh]">
-          {/* Background decorative blob */}
-          <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl opacity-50 transform translate-x-1/3 -translate-y-1/4"></div>
-
-          <div className="flex-1 space-y-8 animate-fade-in relative z-10 w-full lg:w-auto text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-2 mx-auto lg:mx-0">
-              <Sparkles className="h-4 w-4" /> Top Rated Cleaning Service
-            </div>
-
-            <h1 className="text-5xl lg:text-7xl font-display font-extrabold leading-[1.15] tracking-tight text-foreground">
-              The <span className="text-primary relative inline-block">
-                Professional
-                <svg className="absolute w-full h-3 -bottom-1 left-0 text-amber-400" viewBox="0 0 100 20" preserveAspectRatio="none">
-                  <path d="M0 10 Q50 20 100 10" fill="none" stroke="currentColor" strokeWidth="4" />
-                </svg>
-              </span><br />
-              Approach to Clean
-            </h1>
-
-            <p className="text-lg text-muted-foreground max-w-xl leading-relaxed mx-auto lg:mx-0">
-              We provide premium, reliable service providers for your home. From deep cleaning to quick touch-ups, our vetted experts bring the shine back to your space.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 justify-center lg:justify-start">
-              <Link to="/signup?role=customer">
-                <Button size="lg" className="rounded-full px-8 h-14 text-base font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all w-full sm:w-auto">
-                  Book Now
-                </Button>
-              </Link>
-              <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-base font-semibold border-2 bg-background/50 backdrop-blur-sm hover:bg-muted transition-all gap-2 w-full sm:w-auto group">
-                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <Play className="h-4 w-4 text-primary ml-0.5" />
-                </div>
-                Watch Video
-              </Button>
-            </div>
-
-            <div className="flex items-center gap-4 pt-8 justify-center lg:justify-start">
-              <div className="flex -space-x-3">
-                {EXPERTS.slice(0, 4).map((expert, i) => (
-                  <img key={i} src={expert.image} alt={expert.name} className="w-10 h-10 rounded-full border-2 border-background shadow-sm" />
-                ))}
+      <main>
+        {/* HERO SECTION */}
+        <section id="home" className="relative pt-10 pb-20 lg:pt-20 lg:pb-32 px-6">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 items-center gap-16">
+            <div className="space-y-10 animate-fade-in">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-soft border border-brand-light/20 text-brand-dark text-sm font-bold">
+                < Award className="h-4 w-4 text-brand-light" /> #1 Eco-Cleaning Service in India
               </div>
-              <div className="text-sm">
-                <p className="font-bold text-foreground">220+ Members</p>
-                <div className="flex items-center text-amber-400 text-xs">
-                  {'★★★★★'.split('').map((star, i) => <span key={i}>{star}</span>)}
+              
+              <h1 className="text-6xl lg:text-[80px] font-display font-black leading-[1] text-brand-dark">
+                Sparkling Spaces,<br />
+                <span className="text-brand-light drop-shadow-sm italic">Exceptional</span> Results
+              </h1>
+
+              <p className="text-xl text-brand-dark/60 max-w-xl leading-relaxed">
+                Transform your home with our premium, eco-friendly cleaning services. We use non-toxic products to ensure a safe, healthy, and pristine environment for your family.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
+                <Button size="lg" className="green-gradient text-white rounded-full px-10 h-16 text-lg font-bold shadow-2xl hover:scale-105 transition-transform">
+                  Book an Appointment
+                </Button>
+                <div className="flex items-center gap-4 group cursor-pointer">
+                  <div className="h-14 w-14 rounded-full border-2 border-brand-light flex items-center justify-center group-hover:bg-brand-light/10 transition-colors">
+                    <Smartphone className="h-6 w-6 text-brand-dark" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-brand-dark/40">Call us Today</p>
+                    <p className="text-lg font-black text-brand-dark">+91 123 456 7890</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust Section Badges (Figure Style) */}
+              <div className="flex items-center gap-10 pt-10">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex -space-x-3">
+                      {[1,2,3,4].map(i => (
+                        <div key={i} className={`w-8 h-8 rounded-full border-2 border-white bg-gray-200 overflow-hidden`}>
+                           <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=user${i}`} alt="user" />
+                        </div>
+                      ))}
+                    </div>
+                    <span className="text-xl font-black text-brand-dark ml-2">50K+</span>
+                  </div>
+                  <p className="text-xs font-bold text-brand-dark/40 uppercase tracking-widest">Satisfied Customers</p>
+                </div>
+                <div className="h-12 w-[1px] bg-gray-100"></div>
+                <div className="space-y-2">
+                  <div className="flex gap-1">
+                    {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-brand-light text-brand-light" />)}
+                  </div>
+                  <p className="text-xs font-bold text-brand-dark/40 uppercase tracking-widest">4.9/5 Average Rating</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative animate-scale-in">
+              <div className="absolute -inset-4 bg-brand-light/10 rounded-[60px] blur-3xl opacity-50"></div>
+              <div className="relative rounded-[60px] overflow-hidden border-8 border-white shadow-2xl aspect-[4/5]">
+                <img src="/images/hero_main.png" alt="Clean Home" className="w-full h-full object-cover" />
+                <div className="absolute bottom-8 left-8 right-8 bg-white/80 backdrop-blur-md p-6 rounded-3xl border border-white/50 shadow-xl">
+                  <p className="text-brand-dark font-black text-lg italic">"Everything about CleanMate is professional. My house has never looked so fresh!"</p>
+                  <p className="text-brand-dark/40 font-bold text-sm mt-2">— Sarah Johnson, Mumbai</p>
                 </div>
               </div>
             </div>
           </div>
+        </section>
 
-          <div className="flex-1 relative animate-slide-up lg:animate-fade-in mt-10 lg:mt-0">
-            {/* The circular graphic from Figure 1 / Splash from Figure 3 */}
-            <div className="relative w-full aspect-square max-w-[500px] mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary via-primary/80 to-blue-400 rounded-full scale-95 shadow-2xl opacity-90 transform -rotate-6"></div>
-              {/* Clean abstract shape/Blob */}
-
-              <img
-                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1000&auto=format&fit=crop"
-                alt="Professional Cleaner"
-                className="absolute inset-0 w-full h-full object-cover rounded-full mix-blend-overlay opacity-80"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1000&auto=format&fit=crop"
-                alt="Professional Cleaner"
-                className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] object-cover rounded-full shadow-inner z-10"
-              />
-
-              {/* Floating Cards (Figure 1 style) */}
-              <div className="absolute top-1/4 -right-8 lg:-right-12 bg-card rounded-xl p-3 shadow-xl border border-border/50 flex items-center gap-3 animate-float z-20">
-                <img src={EXPERTS[0].image} className="w-10 h-10 rounded-full bg-muted" alt="Expert" />
-                <div>
-                  <p className="text-sm font-bold">{EXPERTS[0].name}</p>
-                  <p className="text-[10px] text-muted-foreground">5.0 ★★★★★</p>
+        {/* QUALITY COMMITMENT SECTION */}
+        <section id="quality" className="py-24 bg-brand-soft/30">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex flex-col lg:flex-row items-center gap-20">
+              <div className="flex-1 w-full grid grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  <div className="h-[250px] rounded-3xl overflow-hidden shadow-lg border-4 border-white">
+                    <img src="https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=800&auto=format&fit=crop" alt="Eco" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="bg-brand-dark p-8 rounded-3xl text-white space-y-4">
+                    <Leaf className="h-10 w-10 text-brand-light" />
+                    <h3 className="text-xl font-bold">100% Eco-Products</h3>
+                    <p className="text-white/60 text-sm">We only use botanical extracts and natural minerals for our cleaning solutions.</p>
+                  </div>
+                </div>
+                <div className="space-y-6 pt-12">
+                  <div className="bg-brand-light p-8 rounded-3xl text-brand-dark space-y-4 shadow-xl">
+                    <Award className="h-10 w-10 text-brand-dark" />
+                    <h3 className="text-xl font-bold">Certified Quality</h3>
+                    <p className="text-brand-dark/60 text-sm">ISO certified cleaning protocols that ensure hospital-grade sanitation.</p>
+                  </div>
+                  <div className="h-[250px] rounded-3xl overflow-hidden shadow-lg border-4 border-white">
+                    <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=800&auto=format&fit=crop" alt="Home" className="w-full h-full object-cover" />
+                  </div>
                 </div>
               </div>
 
-              <div className="absolute bottom-1/4 -left-8 lg:-left-12 bg-card rounded-xl p-3 shadow-xl border border-border/50 flex items-center gap-3 animate-float-delayed z-20">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                  <CheckCircle2 className="h-6 w-6" />
+              <div className="flex-1 space-y-8">
+                <div className="space-y-4">
+                  <span className="text-brand-light font-black uppercase tracking-widest text-sm">Quality Commitment</span>
+                  <h2 className="text-5xl font-display font-black leading-tight text-brand-dark">Our Commitment to<br /><span className="text-brand-light">Quality</span> Cleaning</h2>
+                  <p className="text-lg text-brand-dark/60 leading-relaxed italic border-l-4 border-brand-light pl-6">
+                    "We don't just clean spaces; we rejuvenate them. Our team is dedicated to the highest standards of eco-conscious home maintenance."
+                  </p>
                 </div>
-                <div>
-                  <p className="text-sm font-bold">100% Guaranteed</p>
-                  <p className="text-[10px] text-muted-foreground">Satisfaction</p>
+                <p className="text-brand-dark/60 text-base leading-relaxed">
+                  Choosing CleanMate means choosing a service that cares about your health and the planet. Our professionals are vetted, trained, and equipped with the latest sustainable technology to deliver results that truly shine.
+                </p>
+                <div className="grid grid-cols-2 gap-y-6">
+                  {['Expert Professionals', '100% Satisfaction', 'No-Chemical Policy', 'Emergency 24/7 Support'].map(item => (
+                    <div key={item} className="flex items-center gap-2 font-bold text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-brand-light" /> {item}
+                    </div>
+                  ))}
                 </div>
+                <Button variant="outline" className="rounded-full border-brand-dark/20 text-brand-dark px-8 h-12 font-bold hover:bg-brand-soft">
+                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
               </div>
             </div>
           </div>
         </section>
 
         {/* SERVICES SECTION */}
-        <section id="services" className="py-24 bg-slate-50/50 dark:bg-slate-900/50 border-y border-border/40">
+        <section id="services" className="py-24">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">Our Services</h2>
-              <p className="text-muted-foreground">Comprehensive cleaning solutions tailored for your space. We ensure every corner sparkles.</p>
+            <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+              <span className="text-brand-light font-black uppercase tracking-[0.2em] text-xs">Our Expertise</span>
+              <h2 className="text-5xl font-display font-black text-brand-dark">Fresh Solutions for Every Space</h2>
+              <div className="h-1 w-20 bg-brand-light mx-auto rounded-full"></div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {SERVICES.map((s, i) => (
-                <div key={i} className="bg-card p-8 rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all border border-border/50 group text-center lg:text-left">
-                  <div className={`w-14 h-14 rounded-2xl ${s.bg} flex items-center justify-center mb-6 mx-auto lg:mx-0 group-hover:scale-110 transition-transform`}>
-                    <s.icon className={`h-7 w-7 ${s.color}`} />
+                <div key={i} className="group p-10 rounded-[40px] border border-gray-100 bg-white hover:bg-brand-dark transition-all duration-500 hover:-translate-y-2 shadow-sm hover:shadow-2xl">
+                  <div className={`w-16 h-16 rounded-2xl ${s.bg} flex items-center justify-center mb-8 group-hover:scale-110 transition-transform`}>
+                    <s.icon className="h-8 w-8 text-brand-dark" />
                   </div>
-                  <h3 className="text-xl font-bold mb-3">{s.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{s.desc}</p>
+                  <h3 className="text-2xl font-black mb-4 group-hover:text-white transition-colors">{s.title}</h3>
+                  <p className="text-brand-dark/50 text-base leading-relaxed group-hover:text-white/60 transition-colors uppercase text-[12px] font-bold tracking-wider">
+                    {s.desc}
+                  </p>
+                  <Link to="/" className="inline-flex items-center gap-2 mt-6 text-brand-light font-black group-hover:text-white transition-colors">
+                    Explore <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* FEATURES SECTION */}
-        <section id="features" className="py-24">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">Why CleanMate?</h2>
-              <p className="text-muted-foreground">We stand apart by offering highly trained professionals and guaranteed satisfaction.</p>
-            </div>
+        {/* EQUIPMENT SHOWCASE */}
+        <section className="py-24 bg-brand-dark text-white relative overflow-hidden">
+           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-light/5 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2"></div>
+           
+           <div className="max-w-7xl mx-auto px-6">
+             <div className="flex flex-col lg:flex-row justify-between items-end mb-20 gap-10">
+               <div className="space-y-4">
+                 <span className="text-brand-light font-black uppercase tracking-widest text-sm">Advanced Tools</span>
+                 <h2 className="text-5xl font-display font-black">Our Trusted<br />Cleaning Equipment</h2>
+               </div>
+               <p className="text-white/40 max-w-md italic border-l border-white/10 pl-8">
+                 We invest in the latest low-energy, high-efficiency equipment to reduce our carbon footprint while providing industry-leading results.
+               </p>
+             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                { title: "A Cleaner Environment", img: "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=800&auto=format&fit=crop", desc: "Eco-friendly products ensuring a safe home for families." },
-                { title: "Professional Experts", img: "https://images.unsplash.com/photo-1628177142898-93e46e623666?q=80&w=800&auto=format&fit=crop", desc: "Vetted, trained, and background-checked staff." },
-                { title: "Safety is Our Business", img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800&auto=format&fit=crop", desc: "Insured and bonded service for your complete peace of mind." }
-              ].map((feat, i) => (
-                <div key={i} className="group rounded-3xl overflow-hidden shadow-sm border border-border/50 bg-card hover:shadow-xl transition-all">
-                  <div className="h-56 overflow-hidden">
-                    <img src={feat.img} alt={feat.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  </div>
-                  <div className="p-8 text-center">
-                    <h3 className="text-xl font-bold mb-3">{feat.title}</h3>
-                    <p className="text-sm text-muted-foreground">{feat.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+             <div className="grid md:grid-cols-3 gap-10">
+               {EQUIPMENT.map((item, i) => (
+                 <div key={i} className="group bg-white/5 border border-white/10 rounded-[50px] p-10 hover:bg-white/10 transition-all duration-500">
+                    <div className="h-56 relative mb-8 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-brand-light/5 rounded-full scale-75 blur-xl group-hover:scale-100 transition-transform duration-700"></div>
+                      <img src={item.image} alt={item.name} className="relative z-10 max-h-full object-contain drop-shadow-2xl group-hover:rotate-6 transition-transform duration-500" />
+                    </div>
+                    <div className="text-center space-y-2">
+                       <h4 className="text-2xl font-black">{item.name}</h4>
+                       <p className="text-brand-light uppercase text-xs font-bold tracking-widest">Premium Choice</p>
+                    </div>
+                 </div>
+               ))}
+             </div>
+           </div>
         </section>
 
-        {/* EXPERT MEMBERS */}
-        <section className="py-24 bg-primary/5">
+        {/* TESTIMONIALS */}
+        <section className="py-24 relative">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-              <div>
-                <h2 className="text-3xl md:text-5xl font-display font-bold gap-4">Our Expert Members</h2>
-                <p className="text-muted-foreground mt-4 max-w-xl">Meet the professionals who make your home shine.</p>
+            <div className="grid lg:grid-cols-2 gap-20 items-center">
+              <div className="space-y-10">
+                <div className="space-y-4">
+                  <span className="text-brand-light font-black uppercase tracking-widest text-sm">Customer Stories</span>
+                  <h2 className="text-5xl font-display font-black text-brand-dark leading-tight">People Love Our<br />Eco-Care</h2>
+                </div>
+                
+                <div className="space-y-8">
+                  {[
+                    { name: "Anita Desai", role: "Homeowner", text: "The team arrived on time and used products that didn't leave any chemical smell. My kids have allergies, so this was perfect for us." },
+                    { name: "Rahul Sharma", role: "CEO, TechOffice", text: "CleanMate manages our daily office cleaning across 3 floors. They are silent, efficient, and very professional." }
+                  ].map((t, i) => (
+                    <div key={i} className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm relative group hover:shadow-xl transition-all">
+                       <div className="absolute -top-4 -left-4 h-10 w-10 bg-brand-light rounded-2xl flex items-center justify-center text-brand-dark">
+                         <MessageSquare className="h-5 w-5" />
+                       </div>
+                       <p className="text-brand-dark/70 text-lg leading-relaxed italic mb-6">"{t.text}"</p>
+                       <div className="flex items-center gap-4">
+                         <div className="w-12 h-12 rounded-full bg-brand-soft overflow-hidden">
+                           <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${t.name}`} alt={t.name} />
+                         </div>
+                         <div>
+                            <p className="font-black text-brand-dark">{t.name}</p>
+                            <p className="text-[10px] font-bold uppercase text-brand-light tracking-widest">{t.role}</p>
+                         </div>
+                       </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <Button variant="outline" className="rounded-full">View All <ArrowRight className="ml-2 h-4 w-4" /></Button>
+
+              <div className="bg-brand-soft/50 rounded-[80px] p-16 space-y-12">
+                <div className="text-center space-y-4">
+                  <h3 className="text-4xl font-display font-black text-brand-dark">How We Work</h3>
+                  <div className="h-1 w-12 bg-brand-light mx-auto"></div>
+                </div>
+                <div className="space-y-10">
+                   {[
+                     { step: "01", title: "Online Booking", desc: "Select your service and schedule in 2 minutes." },
+                     { step: "02", title: "Eco-Prep", desc: "We prepare non-toxic solutions for your specific floors." },
+                     { step: "03", title: "Sparkle Day", desc: "Our team arrives and works their magic." }
+                   ].map((item, i) => (
+                     <div key={i} className="flex gap-8 group">
+                        <span className="text-6xl font-display font-black text-brand-light/20 group-hover:text-brand-light transition-colors">{item.step}</span>
+                        <div className="space-y-1">
+                          <h4 className="text-xl font-black text-brand-dark">{item.title}</h4>
+                          <p className="text-brand-dark/50 text-sm font-bold uppercase leading-relaxed tracking-wider">{item.desc}</p>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+                <Button className="w-full h-16 rounded-full green-gradient text-white font-black text-lg shadow-xl shadow-brand-dark/10">Start Your Booking</Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* TEAM SECTION */}
+        <section id="our-team" className="py-24 bg-brand-soft/20">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
+              <span className="text-brand-light font-black uppercase tracking-widest text-sm">Meet the Experts</span>
+              <h2 className="text-5xl font-display font-black text-brand-dark">Our Professional Staff</h2>
+              <p className="text-brand-dark/40 font-bold uppercase text-xs tracking-[0.3em]">Trained. Vetted. Friendly.</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {EXPERTS.map((user, i) => (
-                <div key={i} className="bg-card rounded-3xl p-6 text-center shadow-sm border border-border/50 hover:-translate-y-1 transition-transform">
-                  <img src={user.image} alt={user.name} className="w-24 h-24 mx-auto rounded-full mb-4 bg-muted border-4 border-background shadow-md" />
-                  <h3 className="text-lg font-bold">{user.name}</h3>
-                  <p className="text-sm text-primary font-medium mb-4">{user.role}</p>
-                  <div className="flex justify-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-white transition-colors cursor-pointer">
-                      <UserCheck className="h-4 w-4" />
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[
+                { name: "Robert Fox", role: "Head of Eco-Sanitation" },
+                { name: "Jenny Wilson", role: "Deep Clean Expert" },
+                { name: "Wade Warren", role: "Team Supervisor" },
+                { name: "Jane Cooper", role: "Home Care Specialist" }
+              ].map((user, i) => (
+                <div key={i} className="group relative bg-white rounded-[60px] p-8 pb-12 shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 overflow-hidden">
+                  <div className="absolute top-0 right-0 h-40 w-40 bg-brand-light/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-brand-light/20 transition-all"></div>
+                  <div className="h-56 w-56 mx-auto rounded-full bg-gray-100 p-2 mb-8 relative z-10 border-2 border-brand-light/20 group-hover:border-brand-light transition-colors">
+                     <img 
+                       src={i === 0 ? "/images/expert.png" : `https://api.dicebear.com/7.x/avataaars/svg?seed=cleaner${i+5}`} 
+                       alt={user.name} 
+                       className="w-full h-full object-cover rounded-full" 
+                     />
+                  </div>
+                  <div className="text-center space-y-1 relative z-10">
+                    <h3 className="text-2xl font-black text-brand-dark">{user.name}</h3>
+                    <p className="text-brand-light font-bold text-xs uppercase tracking-widest">{user.role}</p>
+                    <div className="flex justify-center gap-3 pt-4">
+                      <div className="h-8 w-8 rounded-full bg-brand-soft flex items-center justify-center hover:bg-brand-dark hover:text-white transition-all cursor-pointer">
+                        <UserCheck className="h-4 w-4" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -220,55 +378,74 @@ export default function Home() {
       </main>
 
       {/* FOOTER */}
-      <footer className="bg-slate-950 text-slate-300 py-16">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          <div>
-            <div className="flex items-center gap-2 mb-6">
-              <img src={logo} alt="CleanMate" className="h-8 w-8 brightness-0 invert" />
-              <span className="text-2xl font-display font-bold text-white">CleanMate</span>
+      <footer className="bg-brand-dark text-white pt-32 pb-10 px-6 relative overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-full h-1 bg-brand-light"></div>
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-4 gap-20 relative z-10">
+          <div className="space-y-10 lg:col-span-1">
+            <div className="flex items-center gap-2">
+              <div className="h-10 w-10 bg-brand-light rounded-xl flex items-center justify-center">
+                <Sparkles className="h-6 w-6 text-brand-dark" />
+              </div>
+              <span className="text-2xl font-display font-extrabold tracking-tight italic">CleanMate</span>
             </div>
-            <p className="text-sm text-slate-400 mb-6">The professional approach to simple, eco-friendly, and reliable cleaning services.</p>
+            <p className="text-white/40 text-[14px] leading-relaxed font-medium">
+              We provide the most reliable and eco-conscious cleaning services in the country. Our focus on non-toxic products ensures your home remains a safe haven for your family.
+            </p>
             <div className="flex gap-4">
-              {/* Social icons placeholder */}
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors cursor-pointer text-white">𝕏</div>
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors cursor-pointer text-white">in</div>
+              {['fb', 'tw', 'ln', 'ig'].map(s => (
+                <div key={s} className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-brand-light hover:text-brand-dark transition-all cursor-pointer font-bold">
+                  {s.toUpperCase()}
+                </div>
+              ))}
             </div>
           </div>
 
-          <div>
-            <h4 className="text-white font-bold mb-6 text-lg">Quick Links</h4>
-            <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-primary transition-colors">Home</a></li>
-              <li><a href="#about" className="hover:text-primary transition-colors">About Us</a></li>
-              <li><a href="#services" className="hover:text-primary transition-colors">Services</a></li>
-              <li><a href="#contact" className="hover:text-primary transition-colors">Contact</a></li>
-            </ul>
+          <div className="grid grid-cols-2 gap-10 lg:col-span-2">
+            <div className="space-y-10">
+              <h4 className="text-lg font-black italic border-b border-white/10 pb-4">Our Services</h4>
+              <ul className="space-y-4 text-white/40 text-sm font-bold uppercase tracking-widest">
+                {['House Cleaning', 'Office Cleaning', 'Deep Clean', 'Sanitation', 'Windows'].map(l => (
+                  <li key={l} className="hover:text-brand-light cursor-pointer transition-colors flex items-center gap-2">
+                    <ArrowRight className="h-3 w-3" /> {l}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-10">
+              <h4 className="text-lg font-black italic border-b border-white/10 pb-4">Helpful Links</h4>
+              <ul className="space-y-4 text-white/40 text-sm font-bold uppercase tracking-widest">
+                {['About Us', 'Sustainability', 'Expert Team', 'Careers', 'Contact'].map(l => (
+                  <li key={l} className="hover:text-brand-light cursor-pointer transition-colors flex items-center gap-2">
+                    <ArrowRight className="h-3 w-3" /> {l}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <div>
-            <h4 className="text-white font-bold mb-6 text-lg">Services</h4>
-            <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-primary transition-colors">House Cleaning</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Office Cleaning</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Deep Cleaning</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Sanitization</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-bold mb-6 text-lg">Newsletter</h4>
-            <p className="text-sm text-slate-400 mb-4">Subscribe to get the latest updates and offers.</p>
-            <div className="flex">
-              <input type="email" placeholder="Your email" className="bg-white/10 border-none rounded-l-lg px-4 py-2 w-full text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-primary" />
-              <button className="bg-primary text-white px-4 py-2 rounded-r-lg hover:bg-primary/90 transition-colors font-medium">Subscribe</button>
+          <div className="space-y-10 lg:col-span-1">
+            <h4 className="text-lg font-black italic border-b border-white/10 pb-4">Join Newsletter</h4>
+            <p className="text-white/40 text-sm italic">Get eco-cleaning tips and exclusive offers directly in your inbox.</p>
+            <div className="relative">
+              <input type="email" placeholder="email@address.com" className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-sm focus:outline-none focus:border-brand-light transition-colors" />
+              <button className="absolute right-2 top-2 h-11 w-11 bg-brand-light text-brand-dark rounded-xl flex items-center justify-center hover:bg-white transition-colors">
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="pt-4 flex items-center gap-4">
+              <div className="h-10 w-10 rounded-full border border-white/10 flex items-center justify-center text-brand-light">
+                <Shield className="h-5 w-5" />
+              </div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">Secured & Encrypted<br />Booking</p>
             </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
-          <p>© {new Date().getFullYear()} CleanMate. All rights reserved.</p>
-          <div className="flex gap-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+        
+        <div className="max-w-7xl mx-auto mt-20 pt-10 border-t border-white/5 flex flex-col md:row justify-between items-center gap-6 text-[10px] uppercase font-black tracking-[0.3em] text-white/20">
+          <p>© {new Date().getFullYear()} CleanMate Eco-Service. Design by Antigravity.</p>
+          <div className="flex gap-10">
+             <span className="hover:text-brand-light cursor-pointer">Privacy Policy</span>
+             <span className="hover:text-brand-light cursor-pointer">Terms & Conditions</span>
           </div>
         </div>
       </footer>

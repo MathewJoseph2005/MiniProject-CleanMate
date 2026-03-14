@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,40 +6,40 @@
 
 @layer base {
   :root {
-    --background: 216 25% 97%;
-    --foreground: 222 47% 11%;
+    --background: 0 0% 100%;
+    --foreground: 120 40% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 120 40% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 120 40% 15%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 120 30% 15%; /* Dark Green #1a2e1a equivalent */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 88 43% 56%; /* Light Green #97BC62 equivalent */
+    --secondary-foreground: 120 40% 10%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 88 40% 96%;
+    --muted-foreground: 120 20% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 88 43% 56%; 
+    --accent-foreground: 120 30% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.75rem;
+    --border: 120 20% 90%;
+    --input: 120 20% 90%;
+    --ring: 120 30% 15%;
+    --radius: 1rem;
 
-    --success: 152 69% 31%;
+    --success: 120 50% 30%;
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
-    --info: 205 80% 55%;
+    --info: 190 80% 55%;
     --info-foreground: 0 0% 100%;
 
     --sidebar-background: 0 0% 100%;
@@ -113,7 +113,15 @@
   }
   
   .stat-card {
-    @apply bg-card rounded-xl border border-border/60 shadow-soft p-6 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
+    @apply bg-card rounded-2xl border border-brand-soft shadow-soft p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-1;
+  }
+
+  .green-gradient {
+    background: linear-gradient(135deg, #2C5F2D 0%, #97BC62 100%);
+  }
+
+  .green-gradient-soft {
+    background: linear-gradient(135deg, #F1F8E9 0%, #FFFFFF 100%);
   }
 
   .page-container {

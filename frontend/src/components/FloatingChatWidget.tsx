@@ -86,42 +86,46 @@ export function FloatingChatWidget() {
     scrollToBottom();
   };
 
-  if (!user) return null;
-
-  if (!isOpen) {
+  if (!user) return null;  if (!isOpen) {
     return (
       <button
         onClick={() => { setIsOpen(true); setIsMinimized(false); }}
-        className="fixed bottom-6 right-6 h-14 w-14 bg-gradient-to-tr from-[#2a457a] to-[#4068b5] text-white rounded-full shadow-[0_8px_30px_-4px_rgba(42,69,122,0.4)] hover:shadow-[0_12px_40px_-4px_rgba(42,69,122,0.6)] transition-all flex items-center justify-center hover:scale-105 z-50 ring-4 ring-[#2a457a]/20"
+        className="fixed bottom-6 right-6 h-16 w-16 bg-[#1a2e1a] text-white rounded-full shadow-[0_8px_30px_-4px_rgba(26,46,26,0.4)] hover:shadow-[0_12px_40px_-4px_rgba(26,46,26,0.6)] transition-all flex items-center justify-center hover:scale-105 z-50 ring-4 ring-[#97BC62]/20 group"
       >
-        <MessageSquare className="h-6 w-6" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#1a2e1a] to-[#2C5F2D] opacity-100 group-hover:opacity-90 transition-opacity"></div>
+        <MessageSquare className="h-6 w-6 relative z-10" />
+        <span className="absolute -top-1 -right-1 flex h-5 w-5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#97BC62] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-5 w-5 bg-[#97BC62] border-2 border-white flex items-center justify-center text-[10px] font-bold text-[#1a2e1a]">1</span>
+        </span>
       </button>
     );
   }
 
   return (
-    <div className={`fixed bottom-6 right-6 w-[360px] bg-gradient-to-b from-[#5c7ebc] to-[#4261a3] shadow-2xl rounded-3xl overflow-hidden transition-all duration-300 z-50 flex flex-col font-sans ${isMinimized ? 'h-[80px]' : 'h-[600px] max-h-[85vh]'} border border-white/20 backdrop-blur-xl`}>
-      {/* Header matching the attached figure's style */}
-      <div className="bg-gradient-to-r from-[#1b2b4d]/80 via-[#273d6b]/80 to-[#1b2b4d]/80 backdrop-blur-md p-4 flex items-center justify-between shrink-0 relative overflow-hidden rounded-t-3xl border-b border-white/10 shadow-sm z-20">
+    <div className={`fixed bottom-6 right-6 w-[380px] bg-white shadow-2xl rounded-[2.5rem] overflow-hidden transition-all duration-300 z-50 flex flex-col font-sans ${isMinimized ? 'h-[80px]' : 'h-[620px] max-h-[85vh]'} border border-slate-100`}>
+      {/* Header - CleanMate Theme */}
+      <div className="bg-[#1a2e1a] p-5 flex items-center justify-between shrink-0 relative overflow-hidden rounded-t-[2.5rem] shadow-lg z-20">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#97BC62]/10 rounded-bl-full pointer-events-none" />
         
         <div className="flex items-center gap-3 relative z-10">
-          <div className="h-12 w-12 rounded-full border-2 border-white/30 shadow-md bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center shrink-0">
-            <Bot className="h-7 w-7 text-white" />
+          <div className="h-12 w-12 rounded-2xl border border-white/20 shadow-xl bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0">
+            <Bot className="h-7 w-7 text-[#97BC62]" />
           </div>
           <div className="flex flex-col">
-            <p className="font-semibold text-base leading-tight text-white tracking-wide">CleanMate Bot</p>
-            <div className="flex items-center gap-1.5 mt-0.5 opacity-80">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
-              <span className="text-xs text-blue-100 font-medium tracking-wide">Online</span>
+            <p className="font-black text-base leading-tight text-white tracking-tight">CleanMate AI</p>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#97BC62] shadow-[0_0_8px_rgba(151,188,98,0.8)] animate-pulse"></span>
+              <span className="text-[10px] text-white/60 font-black uppercase tracking-widest">Active Assistant</span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 relative z-10 text-white/80">
-          <button onClick={() => setIsMinimized(!isMinimized)} className="p-2 hover:bg-white/10 rounded-full transition-colors" title="Minimize">
+        <div className="flex items-center gap-2 relative z-10">
+          <button onClick={() => setIsMinimized(!isMinimized)} className="p-2.5 text-white/40 hover:text-white hover:bg-white/5 rounded-xl transition-all" title="Minimize">
             <Minimize2 className="h-4 w-4" />
           </button>
-          <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors" title="Close">
+          <button onClick={() => setIsOpen(false)} className="p-2.5 text-white/40 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all" title="Close">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -129,45 +133,47 @@ export function FloatingChatWidget() {
 
       {!isMinimized && (
         <>
-          {/* Chat Area */}
-          <div className="flex-1 bg-gradient-to-b from-[#5c7ebc] to-[#4261a3] p-5 overflow-y-auto overflow-x-hidden no-scrollbar relative" ref={scrollRef}>
+          {/* Chat Area - Clean Background */}
+          <div className="flex-1 bg-slate-50/50 p-6 overflow-y-auto overflow-x-hidden no-scrollbar relative" ref={scrollRef}>
             {messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-90">
-                <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mb-2 backdrop-blur-md border border-white/20 shadow-xl">
-                  <Bot className="h-10 w-10 text-white" />
+              <div className="flex flex-col items-center justify-center h-full text-center space-y-5 px-4">
+                <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center shadow-2xl border border-slate-50 group hover:-rotate-6 transition-transform">
+                  <Bot className="h-12 w-12 text-[#1a2e1a]" />
                 </div>
-                <h3 className="text-xl font-bold text-white tracking-wide">
-                  Welcome!
-                </h3>
-                <p className="text-sm text-blue-100 font-medium px-6 leading-relaxed">
-                  I am your CleanMate Assistant. How can I help you today?
-                </p>
+                <div className="space-y-2">
+                    <h3 className="text-2xl font-black text-[#1a2e1a] tracking-tight">
+                    How can we help?
+                    </h3>
+                    <p className="text-[13px] text-[#1a2e1a]/40 font-bold uppercase tracking-wide leading-relaxed">
+                    Ask us anything about our cleaning services or track your bookings.
+                    </p>
+                </div>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {/* Simulated timestamp */}
-                <div className="flex justify-center my-4">
-                  <span className="text-[11px] font-semibold bg-white/20 text-white backdrop-blur-sm px-3 py-1 rounded-full shadow-sm tracking-wider uppercase">Today</span>
+                <div className="flex justify-center my-2">
+                  <span className="text-[9px] font-black bg-[#1a2e1a]/5 text-[#1a2e1a]/40 px-4 py-1.5 rounded-full tracking-[0.2em] uppercase">Today's Conversation</span>
                 </div>
                 
                 {messages.map((msg, i) => {
                   const isMe = msg.senderId?._id === userId || (!msg.isAiMessage && !msg.senderId);
                   return (
-                    <div key={msg._id || i} className={`flex ${isMe ? 'justify-end' : 'justify-start'} group animate-in slide-in-from-bottom-2`}>
-                      <div className={`max-w-[85%] rounded-[22px] px-5 py-3.5 text-sm shadow-md relative leading-relaxed tracking-wide font-medium ${
+                    <div key={msg._id || i} className={`flex ${isMe ? 'justify-end' : 'justify-start'} group animate-in slide-in-from-bottom-3 duration-500`}>
+                      <div className={`max-w-[85%] px-5 py-4 text-sm shadow-xl relative leading-relaxed tracking-wide font-bold ${
                         isMe 
-                          ? 'bg-[#1e3466] text-white rounded-br-sm border border-white/5' 
-                          : 'bg-white text-slate-800 rounded-bl-sm border border-black/5 hover:shadow-lg transition-shadow'
+                          ? 'bg-[#1a2e1a] text-white rounded-[2rem] rounded-tr-none' 
+                          : 'bg-white text-[#1a2e1a] rounded-[2rem] rounded-tl-none border border-slate-100'
                       }`}>
                         <p className="whitespace-pre-wrap">{msg.text}</p>
-                        <span className={`text-[10px] font-bold absolute -bottom-5 opacity-70 whitespace-nowrap flex items-center gap-1 ${isMe ? 'right-2 text-white/70' : 'left-2 text-white/80'}`}>
+                        <span className={`text-[9px] font-black uppercase tracking-tighter absolute -bottom-6 opacity-40 whitespace-nowrap flex items-center gap-1 ${isMe ? 'right-2' : 'left-2'}`}>
                           {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           {isMe && (
-                            <span>
+                            <span className="ml-1">
                               {msg.status === 'read' ? (
-                                <CheckCheck className="h-3 w-3 text-blue-300" />
+                                <CheckCheck className="h-3 w-3 text-[#97BC62]" />
                               ) : (
-                                <Check className="h-3 w-3 text-white/60" />
+                                <Check className="h-3 w-3" />
                               )}
                             </span>
                           )}
@@ -179,33 +185,33 @@ export function FloatingChatWidget() {
               </div>
             )}
             {isTyping && (
-                <div className="flex justify-start mt-4 animate-in fade-in">
-                    <div className="bg-white/20 backdrop-blur-md rounded-full px-4 py-2 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce"></span>
-                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                <div className="flex justify-start mt-8 animate-in slide-in-from-left-2">
+                    <div className="bg-[#97BC62]/10 rounded-2xl px-5 py-3 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 bg-[#97BC62] rounded-full animate-bounce"></span>
+                        <span className="w-1.5 h-1.5 bg-[#97BC62] rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                        <span className="w-1.5 h-1.5 bg-[#97BC62] rounded-full animate-bounce [animation-delay:0.4s]"></span>
                     </div>
                 </div>
             )}
           </div>
 
-          <div className="p-4 bg-gradient-to-t from-[#36518a] to-[#4261a3] relative z-20 pb-6 rounded-b-3xl">
-             <form onSubmit={handleSend} className="relative flex items-center bg-[#294273] rounded-full p-1.5 pl-4 shadow-inner border border-white/10">
-                <button type="button" className="p-2 text-blue-200 hover:text-white transition-colors bg-white/5 rounded-full hover:bg-white/20">
+          <div className="p-5 bg-white border-t border-slate-100 relative z-20 pb-8">
+             <form onSubmit={handleSend} className="relative flex items-center bg-slate-50 rounded-2xl p-1.5 transition-all focus-within:bg-white focus-within:shadow-xl focus-within:ring-2 focus-within:ring-[#97BC62]/20">
+                <button type="button" className="p-3 text-[#1a2e1a]/20 hover:text-[#97BC62] transition-colors rounded-xl">
                    <Paperclip className="h-5 w-5" />
                 </button>
                 <Input
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Enter your message..."
-                  className="flex-1 border-0 bg-transparent text-white placeholder:text-blue-200/70 focus-visible:ring-0 shadow-none font-medium text-[15px] px-3 tracking-wide"
+                  placeholder="Need help with something?"
+                  className="flex-1 border-0 bg-transparent text-[#1a2e1a] placeholder:text-[#1a2e1a]/20 focus-visible:ring-0 shadow-none font-bold text-[14px] px-3 tracking-tight"
                 />
                 <button
                   type="submit"
                   disabled={!inputValue.trim()}
-                  className="h-10 w-10 bg-gradient-to-br from-blue-400 to-cyan-400 text-white rounded-full flex items-center justify-center hover:opacity-90 disabled:opacity-50 transition-all shadow-md ml-1 shrink-0"
+                  className="h-11 w-11 bg-[#1a2e1a] text-white rounded-xl flex items-center justify-center hover:bg-[#2C5F2D] disabled:opacity-20 transition-all shadow-lg active:scale-95 ml-1 shrink-0"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-0.5"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                  <Send className="h-5 w-5 text-[#97BC62]" />
                 </button>
              </form>
           </div>

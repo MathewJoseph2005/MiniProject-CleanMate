@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { StatCard } from "@/components/StatCard";
-import { Users, ShieldCheck, Calendar, AlertTriangle } from "lucide-react";
+import { Users, ShieldCheck, Calendar, AlertTriangle, Star } from "lucide-react";
 import { adminAPI } from "@/lib/api";
 import { AdminDashboardData } from "@/types";
 
@@ -19,30 +19,41 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="page-container animate-fade-in">
-      <h2 className="page-header">Admin Overview</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="page-container animate-fade-in p-8 space-y-8">
+      <div className="flex flex-col gap-1">
+        <h2 className="text-3xl font-display font-bold text-[#1a2e1a]">Admin Overview</h2>
+        <p className="text-sm text-[#1a2e1a]/40 font-medium">Manage and monitor platform performance</p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard title="Total Users" value={data.stats.totalUsers} icon={Users} variant="primary" />
-        <StatCard title="Total Agents" value={data.stats.totalAgents} icon={ShieldCheck} variant="success" />
-        <StatCard title="Total Bookings" value={data.stats.totalBookings} icon={Calendar} variant="accent" />
+        <StatCard title="Total Agents" value={data.stats.totalAgents} icon={ShieldCheck} variant="accent" />
+        <StatCard title="Total Bookings" value={data.stats.totalBookings} icon={Calendar} variant="success" />
         <StatCard title="Pending Complaints" value={data.stats.pendingComplaints} icon={AlertTriangle} variant="warning" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="bg-card rounded-xl border border-border/60 shadow-soft p-6">
-          <h3 className="font-display font-semibold mb-3">Revenue This Month</h3>
-          <p className="text-3xl font-display font-bold text-primary">₹{data.revenue.toLocaleString("en-IN")}</p>
-          <p className="text-xs text-success mt-1">From completed bookings</p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 p-8 flex flex-col items-center text-center group hover:-translate-y-1 transition-all duration-300">
+          <h3 className="text-[#1a2e1a]/60 text-sm font-bold uppercase tracking-widest mb-4">Revenue This Month</h3>
+          <p className="text-4xl font-display font-black text-[#1a2e1a]">₹{data.revenue.toLocaleString("en-IN")}</p>
+          <div className="mt-4 px-4 py-1.5 bg-[#97BC62]/20 text-[#1a2e1a] text-[10px] font-bold rounded-full uppercase tracking-tighter">
+            Verified Earnings
+          </div>
         </div>
-        <div className="bg-card rounded-xl border border-border/60 shadow-soft p-6">
-          <h3 className="font-display font-semibold mb-3">Active Services</h3>
-          <p className="text-3xl font-display font-bold text-primary">{data.activeServices}</p>
-          <p className="text-xs text-muted-foreground mt-1">Across {data.activeAgents} agents</p>
+        
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 p-8 flex flex-col items-center text-center group hover:-translate-y-1 transition-all duration-300">
+          <h3 className="text-[#1a2e1a]/60 text-sm font-bold uppercase tracking-widest mb-4">Active Services</h3>
+          <p className="text-4xl font-display font-black text-[#1a2e1a]">{data.activeServices}</p>
+          <p className="text-xs text-[#1a2e1a]/40 mt-3 font-semibold">Across {data.activeAgents} registered agents</p>
         </div>
-        <div className="bg-card rounded-xl border border-border/60 shadow-soft p-6">
-          <h3 className="font-display font-semibold mb-3">Customer Satisfaction</h3>
-          <p className="text-3xl font-display font-bold text-primary">{data.satisfaction}/5</p>
-          <p className="text-xs text-success mt-1">Average rating</p>
+
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 p-8 flex flex-col items-center text-center group hover:-translate-y-1 transition-all duration-300">
+          <h3 className="text-[#1a2e1a]/60 text-sm font-bold uppercase tracking-widest mb-4">Platform Health</h3>
+          <div className="flex items-center gap-2 mb-1">
+             <Star className="h-6 w-6 text-[#97BC62] fill-[#97BC62]" />
+             <p className="text-4xl font-display font-black text-[#1a2e1a]">{data.satisfaction}/5</p>
+          </div>
+          <p className="text-xs text-[#1a2e1a]/40 mt-2 font-semibold tracking-wide">Average Service Rating</p>
         </div>
       </div>
     </div>

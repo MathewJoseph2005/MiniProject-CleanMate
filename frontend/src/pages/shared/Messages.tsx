@@ -136,47 +136,64 @@ export default function Messages() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-72px)] bg-slate-50 dark:bg-slate-950 overflow-hidden">
-      {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'w-full md:w-80' : 'hidden md:flex md:w-80'} flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-20`}>
-        <div className="p-4 border-b border-slate-100 dark:border-slate-800">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Messages</h2>
+    <div className="flex h-[calc(100vh-80px)] bg-slate-50 overflow-hidden">
+      {/* Sidebar - Green Theme */}
+      <div className={`${isSidebarOpen ? 'w-full md:w-96' : 'hidden md:flex md:w-96'} flex-col border-r border-slate-100 bg-white z-20`}>
+        <div className="p-6 border-b border-slate-50">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-black text-[#1a2e1a] tracking-tight">Messages</h2>
+            <div className="h-8 w-8 rounded-xl bg-[#97BC62]/10 flex items-center justify-center text-[#1a2e1a]">
+              <MessageSquare className="h-4 w-4" />
+            </div>
+          </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <Input placeholder="Search chats..." className="pl-9 rounded-full bg-slate-50 dark:bg-slate-800 border-none h-10 text-sm" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1a2e1a]/20" />
+            <Input placeholder="Search conversations..." className="pl-11 rounded-2xl bg-slate-50 border-none h-12 text-sm font-bold placeholder:text-[#1a2e1a]/20 text-[#1a2e1a]" />
           </div>
         </div>
         
         <ScrollArea className="flex-1">
-          <div className="p-2 space-y-1">
+          <div className="p-4 space-y-2">
             {activeChats.length === 0 ? (
-              <div className="p-8 text-center">
-                <p className="text-sm text-slate-500">No active chats found</p>
+              <div className="p-12 text-center">
+                <p className="text-xs font-black uppercase tracking-widest text-[#1a2e1a]/20">No active chats</p>
               </div>
             ) : (
               activeChats.map((chat) => (
                 <button
                   key={chat._id || chat.id}
                   onClick={() => selectChat(chat)}
-                  className={`w-full p-3 rounded-xl flex items-center gap-3 transition-all ${
+                  className={`w-full p-4 rounded-3xl flex items-center gap-4 transition-all group ${
                     selectedChat?._id === chat._id || selectedChat?.id === chat.id
-                      ? "bg-primary/10 border-primary/20"
-                      : "hover:bg-slate-50 dark:hover:bg-slate-800"
+                      ? "bg-[#1a2e1a] text-white shadow-xl shadow-[#1a2e1a]/20"
+                      : "hover:bg-[#97BC62]/5"
                   }`}
                 >
-                  <div className="h-12 w-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-slate-700">
-                    <User className="h-6 w-6 text-slate-500" />
+                  <div className={`h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 border-2 transition-colors ${
+                    selectedChat?._id === chat._id || selectedChat?.id === chat.id
+                      ? "bg-white/10 border-white/20"
+                      : "bg-slate-50 border-slate-100 group-hover:border-[#97BC62]"
+                  }`}>
+                    <User className={`h-6 w-6 ${
+                      selectedChat?._id === chat._id || selectedChat?.id === chat.id ? "text-white" : "text-[#1a2e1a]/40"
+                    }`} />
                   </div>
                   <div className="flex-1 text-left min-w-0">
                     <div className="flex justify-between items-start mb-0.5">
-                      <p className="font-semibold text-slate-900 dark:text-white truncate h-5">
+                      <p className={`font-black tracking-tight truncate ${
+                        selectedChat?._id === chat._id || selectedChat?.id === chat.id ? "text-white" : "text-[#1a2e1a]"
+                      }`}>
                         {user?.role === "customer" ? chat.agentId.fullName : chat.customerName}
                       </p>
-                      <span className="text-[10px] text-slate-400 shrink-0 mt-1 uppercase font-bold tracking-tighter">
+                      <span className={`text-[9px] shrink-0 mt-1 uppercase font-black tracking-tighter ${
+                        selectedChat?._id === chat._id || selectedChat?.id === chat.id ? "text-white/40" : "text-[#1a2e1a]/30"
+                      }`}>
                         {new Date(chat.date).toLocaleDateString([], { month: 'short', day: 'numeric' })}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-500 truncate font-medium">{chat.serviceType}</p>
+                    <p className={`text-[10px] uppercase font-black tracking-widest truncate ${
+                      selectedChat?._id === chat._id || selectedChat?.id === chat.id ? "text-[#97BC62]" : "text-[#1a2e1a]/40"
+                    }`}>{chat.serviceType}</p>
                   </div>
                 </button>
               ))
@@ -186,66 +203,66 @@ export default function Messages() {
       </div>
 
       {/* Chat Window */}
-      <div className={`${!isSidebarOpen ? 'w-full' : 'hidden md:flex'} flex-1 flex-col bg-slate-50 dark:bg-slate-950 relative`}>
+      <div className={`${!isSidebarOpen ? 'w-full' : 'hidden md:flex'} flex-1 flex-col bg-slate-50 relative`}>
         {selectedChat ? (
           <>
             {/* Header */}
-            <div className="h-16 flex items-center justify-between px-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-10">
-              <div className="flex items-center gap-3">
-                <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsSidebarOpen(true)}>
+            <div className="h-20 flex items-center justify-between px-6 bg-white border-b border-slate-100 z-10">
+              <div className="flex items-center gap-4">
+                <Button variant="ghost" size="icon" className="md:hidden rounded-xl" onClick={() => setIsSidebarOpen(true)}>
                   <ChevronLeft className="h-5 w-5" />
                 </Button>
-                <div className="h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700">
-                  <User className="h-5 w-5 text-slate-500" />
+                <div className="h-12 w-12 rounded-2xl bg-[#1a2e1a] flex items-center justify-center border-2 border-[#1a2e1a] shadow-lg">
+                  <User className="h-6 w-6 text-[#97BC62]" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900 dark:text-white text-sm">
+                  <h3 className="font-black text-[#1a2e1a] text-lg tracking-tight">
                     {user?.role === "customer" ? selectedChat.agentId.fullName : selectedChat.customerName}
                   </h3>
-                  <div className="flex items-center gap-1.5 opacity-80">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Online</span>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#97BC62] animate-pulse"></span>
+                    <span className="text-[10px] text-[#1a2e1a]/40 font-black uppercase tracking-[0.2em]">Live Connection</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 p-4 overflow-y-auto no-scrollbar" ref={scrollRef}>
-              <div className="space-y-6">
+            <div className="flex-1 p-8 overflow-y-auto no-scrollbar" ref={scrollRef}>
+              <div className="space-y-8">
                 <div className="flex justify-center mb-8">
-                  <div className="px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-800 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest shadow-sm">
-                    Conversation Started
+                  <div className="px-4 py-1.5 rounded-full bg-[#1a2e1a]/5 text-[9px] font-black text-[#1a2e1a]/40 uppercase tracking-[0.3em]">
+                    Conversation Established
                   </div>
                 </div>
 
                 {messages.length === 0 ? (
-                  <div className="text-center py-20">
-                    <div className="h-16 w-16 bg-white dark:bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-200 dark:border-slate-800 shadow-sm">
-                      <MessageSquare className="h-8 w-8 text-primary" />
+                  <div className="text-center py-20 flex flex-col items-center">
+                    <div className="h-20 w-20 bg-white rounded-3xl flex items-center justify-center mb-6 shadow-xl border border-slate-50">
+                      <MessageSquare className="h-10 w-10 text-[#97BC62]" />
                     </div>
-                    <p className="text-sm font-medium text-slate-500">No messages yet. Send a greeting!</p>
+                    <p className="text-sm font-black text-[#1a2e1a]/40 uppercase tracking-widest">No messages yet. Say hello!</p>
                   </div>
                 ) : (
                   messages.map((msg, i) => {
                     const isMe = msg.senderId?._id === user?.id || (user as any)?._id || (!msg.isAiMessage && !msg.senderId);
                     return (
-                      <div key={msg._id || i} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm shadow-sm relative ${
+                      <div key={msg._id || i} className={`flex ${isMe ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-3`}>
+                        <div className={`max-w-[75%] rounded-[2rem] px-6 py-4 text-sm shadow-xl relative ${
                           isMe 
-                            ? 'bg-primary text-white rounded-br-none' 
-                            : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-bl-none border border-slate-100 dark:border-slate-700'
+                            ? 'bg-[#1a2e1a] text-white rounded-tr-none' 
+                            : 'bg-white text-[#1a2e1a] rounded-tl-none border border-slate-50'
                         }`}>
-                          <p className="font-medium">{msg.text}</p>
-                          <div className={`text-[9px] mt-1 opacity-70 font-bold flex items-center gap-1 ${isMe ? 'justify-end' : 'justify-start'}`}>
+                          <p className="font-bold tracking-tight">{msg.text}</p>
+                          <div className={`text-[9px] mt-2 opacity-40 font-black uppercase tracking-tighter flex items-center gap-1.5 ${isMe ? 'justify-end' : 'justify-start'}`}>
                              <Clock className="h-2.5 w-2.5" />
                              {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                              {isMe && (
                                <span className="ml-1">
                                  {msg.status === 'read' ? (
-                                   <CheckCheck className="h-3 w-3 text-blue-300" />
+                                   <CheckCheck className="h-3 w-3 text-[#97BC62]" />
                                  ) : (
-                                   <Check className="h-3 w-3 text-white/60" />
+                                   <Check className="h-3 w-3" />
                                  )}
                                </span>
                              )}
@@ -259,32 +276,32 @@ export default function Messages() {
             </div>
 
             {/* Input */}
-            <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pb-8">
-              <form onSubmit={handleSend} className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 rounded-2xl p-1.5 pl-4 border border-slate-200 dark:border-slate-700">
+            <div className="p-6 bg-white border-t border-slate-100 pb-10">
+              <form onSubmit={handleSend} className="flex items-center gap-3 bg-slate-50 rounded-[2rem] p-2 transition-all focus-within:bg-white focus-within:shadow-2xl focus-within:ring-2 focus-within:ring-[#97BC62]/20 border border-slate-100">
                 <Input
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Type a message..."
-                  className="flex-1 border-0 bg-transparent focus-visible:ring-0 shadow-none font-medium"
+                  placeholder="Type your message..."
+                  className="flex-1 border-0 bg-transparent focus-visible:ring-0 shadow-none font-bold text-[#1a2e1a] placeholder:text-[#1a2e1a]/20"
                 />
                 <Button
                   type="submit"
                   disabled={!inputValue.trim()}
-                  className="rounded-xl h-10 w-10 flex items-center justify-center p-0 shrink-0"
+                  className="rounded-2xl h-12 w-12 bg-[#1a2e1a] hover:bg-[#2C5F2D] flex items-center justify-center p-0 shrink-0 shadow-lg active:scale-95"
                 >
-                  <Send className="h-5 w-5" />
+                  <Send className="h-5 w-5 text-[#97BC62]" />
                 </Button>
               </form>
             </div>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center opacity-40">
-            <div className="h-24 w-24 bg-slate-200 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
-              <MessageSquare className="h-12 w-12 text-slate-400" />
+          <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
+            <div className="h-32 w-32 bg-white rounded-[3rem] flex items-center justify-center mb-10 shadow-2xl border border-slate-50 group hover:-rotate-12 transition-transform">
+              <MessageSquare className="h-16 w-16 text-[#97BC62]" />
             </div>
-            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Your Conversations</h3>
-            <p className="max-w-xs text-slate-500 font-medium leading-relaxed">
-              Select a chat from the sidebar to start communicating with your {user?.role === 'customer' ? 'agent' : 'customer'}.
+            <h3 className="text-3xl font-black text-[#1a2e1a] mb-4 tracking-tight">Your Conversations</h3>
+            <p className="max-w-xs text-[#1a2e1a]/40 font-bold uppercase tracking-widest text-[11px] leading-loose">
+              Select a conversation from the sidebar to chat with your {user?.role === 'customer' ? 'service professional' : 'customer'}.
             </p>
           </div>
         )}
